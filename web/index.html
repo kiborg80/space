@@ -1,0 +1,72 @@
+<!-- web/index.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Космическая Игра</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a1a;
+            color: #00ffcc;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        h1 { text-shadow: 0 0 10px #00ffcc; }
+        .btn {
+            background: #00cc99;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+            box-shadow: 0 0 15px rgba(0, 204, 153, 0.5);
+        }
+        .balance {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Космическая Игра</h1>
+    <div class="balance">Баланс: <span id="balance">0</span> $STAR</div>
+    <button class="btn" onclick="mine()">⛏️ Майнить</button>
+    <button class="btn" onclick="closeApp()">❌ Закрыть</button>
+
+    <script>
+        // Получаем объект WebApp
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+
+        // Пример баланса
+        let balance = 0;
+
+        function mine() {
+            balance += 10;
+            document.getElementById('balance').textContent = balance;
+            tg.HapticFeedback.impactOccurred('medium');
+
+            // Отправляем данные в бота
+            tg.sendData(JSON.stringify({ action: "mine", balance: balance }));
+        }
+
+        function closeApp() {
+            tg.close();
+        }
+
+        // Отправляем начальные данные
+        tg.sendData(JSON.stringify({ action: "open", user: tg.initDataUnsafe.user }));
+    </script>
+</body>
+</html>
